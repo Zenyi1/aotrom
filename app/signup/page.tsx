@@ -3,15 +3,23 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../auth-context"; // We will create this
-import { Feather, UserPlus } from "lucide-react";
+import { useAuth } from "../auth-context";
+import {
+  Feather,
+  UserPlus,
+  AtSign,
+  User,
+  AlertTriangle, // Import an icon for the error
+} from "lucide-react";
 
 export default function SignupPage() {
-  const [user, setUser] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [handle, setHandle] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { login, isLoggedIn } = useAuth(); // Use login() to fake auth
+  const [error, setError] = useState<string | null>(null); // State for error messages
+  const { login, isLoggedIn } = useAuth();
   const router = useRouter();
 
   // If already logged in, redirect to dashboard
@@ -23,13 +31,21 @@ export default function SignupPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null); // Clear any previous errors
+
     if (password !== confirmPassword) {
-      // In a real app, show a proper error message
-      console.error("Passwords don't match");
+      setError("Passwords do not match. Please try again.");
       return;
     }
-    // In a real app, you'd send this to your backend to create a user
-    console.log("Signing up with:", { email, password });
+
+    // In a real app, you'd also check for handle/email uniqueness here
+    // if (handle_is_taken) {
+    //   setError("This handle is already taken.");
+    //   return;
+    // }
+
+    // In a real app, you'd send this to your backend
+    console.log("Signing up with:", { displayName, handle, email, password });
     login(); // Set fake login state to true
     router.push("/"); // Redirect to dashboard
   };
@@ -41,26 +57,56 @@ export default function SignupPage() {
           <Feather className="text-indigo-500" size={48} />
         </div>
         <h2 className="text-3xl font-bold text-center text-white mb-6">
-          Create Your AOTROM Account
+          Create Your Account
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label
-              htmlFor="user"
+              htmlFor="displayName"
               className="block text-sm font-medium text-gray-300 mb-1"
             >
-              Username
+              Display Name
             </label>
-            <input
-              type="user"
-              id="user"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              placeholder="user"
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              required
-            />
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <User size={18} className="text-gray-400" />
+              </span>
+              <input
+                type="text"
+                id="displayName"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Your Public Name"
+                className="w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
+          </div>
+          <div>
+            <label
+              htmlFor="handle"
+              className="block text-sm font-medium text-gray-300 mb-1"
+            >
+              Handle
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <AtSign size={18} className="text-gray-400" />
+              </span>
+              <input
+                type="text"
+                id="handle"
+                value={handle}
+                onChange={(e) => setHandle(e.target.value)}
+                placeholder="youruniquehandle"
+                className="w-full pl-10 pr-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                required
+              />
+            </div>
+            <p className="text-xs text-gray-400 mt-1 pl-1">
+              This must be unique. No spaces or special characters.
+            </p>
           </div>
           <div>
             <label
@@ -113,6 +159,16 @@ export default function SignupPage() {
               required
             />
           </div>
+
+          {/* === ERROR MESSAGE DISPLAY === */}
+          {error && (
+            <div className="bg-red-900/30 border border-red-500/50 text-red-300 p-3 rounded-lg text-sm flex items-center gap-2">
+              <AlertTriangle size={18} />
+              <span>{error}</span>
+            </div>
+          )}
+          {/* ============================== */}
+
           <button
             type="submit"
             className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-500 transition-all duration-200"

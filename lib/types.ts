@@ -12,13 +12,37 @@ export interface Bet {
 // Define props for the DashboardCard component
 export interface DashboardCardProps {
   title: string;
-  icon: ReactElement<LucideProps>; // Be specific about the icon's props
+  icon: ReactElement<LucideProps>;
   children: ReactNode;
 }
 
 // Define props for the StatCard component
 export interface StatCardProps {
   title: string;
-  value: string | number; // Value can be a string or a number
-  icon: ReactElement<LucideProps>; // Be specific about the icon's props
+  value: string | number;
+  icon: ReactElement<LucideProps>;
+}
+
+// Define props for the ProfileStatCard component
+export interface ProfileStatCardProps {
+  title: string;
+  value: string | number;
+  icon: ReactElement<LucideProps>;
+}
+
+// Define props for the SettingsCard component
+export interface SettingsCardProps {
+  title: string;
+  description: string;
+  children: ReactNode;
+}
+
+// Define props for the SettingsInput component
+export interface SettingsInputProps {
+  label: string;
+  id: string;
+  type: string;
+  defaultValue: string;
+  icon: ReactElement<LucideProps>;
+  autoComplete?: string;
 }

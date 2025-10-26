@@ -290,7 +290,6 @@ function DashboardCard({ title, icon, children }: DashboardCardProps) {
     <div className="bg-gray-800 rounded-xl shadow-lg overflow-hidden h-full">
       <div className="p-6">
         <div className="flex items-center gap-3 mb-4">
-          {/* This will now work without error */}
           {React.cloneElement(icon, { size: 20 })}
           <h3 className="text-xl font-semibold text-white">{title}</h3>
         </div>
@@ -307,7 +306,6 @@ function StatCard({ title, value, icon }: StatCardProps) {
   return (
     <div className="bg-gray-800 rounded-xl shadow-lg p-5 flex items-center gap-4">
       <div className="p-3 bg-gray-700/50 rounded-full">
-        {/* This will also work without error */}
         {React.cloneElement(icon, { size: 24 })}
       </div>
       <div>
